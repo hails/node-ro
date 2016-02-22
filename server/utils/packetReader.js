@@ -4,7 +4,7 @@
   * Reads buffer data from incoming packets
   * Automatically controls buffer's offset
   * 
-  * @author Alvaro Bezerra <alvaro.dasmerces@gmail.com>
+  * @author Alvaro Bezerra <https://github.com/alvarodms>
 */
 
 var PacketReader = function( buffer, startingOffset ) {

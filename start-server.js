@@ -1,14 +1,16 @@
 #!/usr/bin/env node
 
 require('colors');
-var NodeServer        = require('./server/server.js');
-var MongoDB           = require('./server/mongodb/connectionManager.js');
+var NodeServer  = require('./server/server.js');
+var MongoDB     = require('./server/database/connectionManager.js');
+var Redis       = require('./server/database/redisManager.js');
+var Async       = require('async');
 
 /**
   * Node Emulator Project
   * A Ragnarok Online emulator built with NodeJS
   *
-  * @author		Alvaro Bezerra <alvaro.dasmerces@gmail.com>
+  * @author		Alvaro Bezerra <https://github.com/alvarodms>
   * @version	1.0
   * @since		2015-12-03
 */
@@ -21,10 +23,30 @@ console.log("---- by alvaro.dasmerces@gmail.com ----".blue);
 
 console.log("[ I ] Node Emulator is starting...");
 
-/** MongoDB initialization */
-new MongoDB(onMongoDBReady);
+Async.parallel([
+  /** MongoDB initialization */
+  function( callback ) {
+    new MongoDB(x => {
+      return callback();
+    });
+  },
+  
+  /** Redis initialization */
+  function( callback ) {
+    Redis.manager.init(x => {
+      return callback();
+    });
+  }
+], function( error, results ) {
+  if(error) {
+    console.log("[ E ] StartServer::An error occurred while connecting to MySQL and/or Redis. See logs for more details.".red);
+    return process.exit(1);
+  }
+  
+  return onDatabasesReady();
+});
 
-function onMongoDBReady( _db ) {
+function onDatabasesReady( _db ) {
   global._NODE.db = _db;
 
   /** Node-server initialization */

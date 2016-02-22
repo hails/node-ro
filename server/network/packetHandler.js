@@ -6,7 +6,7 @@ var PacketReader	= require('../utils/packetReader.js');
   *
   * Handle incoming packets
   *
-  * @author Alvaro Bezerra <alvaro.dasmerces@gmail.com>
+  * @author Alvaro Bezerra <https://github.com/alvarodms>
 */
 
 var PacketHandler = function( socket ) {

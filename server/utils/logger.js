@@ -6,7 +6,7 @@ var path 	= require('path');
   *
   * Write server logs
   *
-  * @author Alvaro Bezerra <alvaro.dasmerces@gmail.com>
+  * @author Alvaro Bezerra <https://github.com/alvarodms>
 */
 
 const LoginLogsPath = path.join(__dirname, '../../logs', 'login-server.log');

@@ -8,7 +8,7 @@ var PacketHandler	= require('./network/packetHandler.js');
   *
   * Instantiate a TCP/IP node emulator server
   *
-  * @author Alvaro Bezerra <alvaro.dasmerces@gmail.com>
+  * @author Alvaro Bezerra <https://github.com/alvarodms>
 */
 
 var NodeServer = function() {

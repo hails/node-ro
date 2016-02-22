@@ -7,7 +7,7 @@
   * PACKET.IN:  Client -> Server packets
   * PACKET.OUT: Server -> Client packets
 
-  * @author Alvaro Bezerra <alvaro.dasmerces@gmail.com>
+  * @author Alvaro Bezerra <https://github.com/alvarodms>
 */
 
 var PACKET 		= {};
@@ -119,6 +119,20 @@ PACKET.OUT.ACCEPT_ENTER_NEO_UNION.prototype.toBuffer = function() {
 	offset = buf.writeUInt8(this.premiumEndSlot, offset);
 	offset = buf.write('', offset, 20); //unecessary data
 
+	return buf;
+};
+
+// 0x6c
+PACKET.OUT.REFUSE_ENTER = function() {
+	this.errorCode = 0;
+};
+PACKET.OUT.REFUSE_ENTER.prototype.toBuffer = function() {
+	var buf		= new Buffer(3),
+		offset  = 0;
+		
+	offset = buf.writeUInt16LE(0x6c, offset); //packet type/id
+	offset = buf.writeUInt8(this.errorCode, offset);
+	
 	return buf;
 };
 

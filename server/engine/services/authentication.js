@@ -6,12 +6,10 @@ var NodeServer = require('../../server.js');
   *
   * User authentication services
   *
-  * @author Alvaro Bezerra <alvaro.dasmerces@gmail.com>
+  * @author Alvaro Bezerra <https://github.com/alvarodms>
 */
 
 var AuthenticationService = {};
-
-console.log(NodeServer);
 
 const LOGIN_ERROR = {
 	UnregisteredId: 0,				// 0 = Unregistered ID
@@ -121,15 +119,13 @@ AuthenticationService.isAccountRegistered = function( onComplete ) {
 */
 AuthenticationService.isUserAndPasswordValid = function( userAccount, onComplete ) {
 	if(userAccount.password !== this.password) {
-		onComplete({
+		return onComplete({
 			code: LOGIN_ERROR.IncorrectPassword
 		});
 	}
 	else {
-		onComplete(null, userAccount);
+		return onComplete(null, userAccount);
 	}
-
-	return;
 };
 
 //export

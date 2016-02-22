@@ -6,7 +6,7 @@ var LoginEngine			= require('../engine/loginEngine.js');
   *
   * Link all packets ID to their respective structure and handler
   *
-  * @author Alvaro Bezerra <alvaro.dasmerces@gmail.com>
+  * @author Alvaro Bezerra <https://github.com/alvarodms>
 */
 
 //export

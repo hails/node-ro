@@ -4,7 +4,7 @@
   * Network helper functions
   * Thanks to StackExchange community for ipToLong() <http://codereview.stackexchange.com/questions/54775/converting-an-ip>
   * 
-  * @author Alvaro Bezerra <alvaro.dasmerces@gmail.com>
+  * @author Alvaro Bezerra <https://github.com/alvarodms>
 */
 
 //Fix me: maybe we should not use RegExp for better performance?

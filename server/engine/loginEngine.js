@@ -1,14 +1,18 @@
-var Authentication	= require('./services/authentication.js');
-var NetworkUtils    = require('../utils/network.js');
-var Packets  		= require('../packets/packetStructure.js');
-var NodeServer      = require('../server.js');
+'use strict';
+
+var Authentication 			= require('./services/authentication.js');
+var NetworkUtils 			= require('../utils/network.js');
+var Packets 				= require('../packets/packetStructure.js');
+var NodeServer 				= require('../server.js');
+var Redis 					= require('../database/redisManager.js');
+var AuthenticationNode 		= require('../model/authenticationNode.js');
 
 /**
   * Node Emulator Project
   *
   * Login-server main engine. Handles all login-server related packets
   *
-  * @author Alvaro Bezerra <alvaro.dasmerces@gmail.com>
+  * @author Alvaro Bezerra <https://github.com/alvarodms>
 */
 
 var LoginEngine = {};
@@ -38,6 +42,22 @@ LoginEngine.onLoginRequest = function( pkt, socket ) {
 		}];
 
 		fwdResponse();
+		
+		//cache authentication node
+		let authNode 			= new AuthenticationNode();
+			authNode.authCode 	= responsePkt.authCode;
+			authNode.userLevel 	= responsePkt.userLevel;
+			authNode.sex 		= responsePkt.sex;
+			authNode.ip 		= socket.remoteAddress;
+			authNode.version 	= pkt.version;
+			authNode.clientType = pkt.clientType;
+			
+		let redisClient = Redis.manager.getClient();
+		
+		redisClient.select(Redis.databases.AUTH_DB, function() {
+			redisClient.set(responsePkt.aid, JSON.stringify(authNode));
+			redisClient.expire(responsePkt.aid, 60); //auth node expiration time
+		});
 	}
 
 	function onUserRejected( errorCode ) {
@@ -68,14 +88,46 @@ LoginEngine.onLoginSuccess = function( pkt, socket ) {
 
 	socket.write(aidPkt);
 
-	//TO DO: Verificar token de autenticação que foi enviado pelo packet 0x64
+	var redisClient = Redis.manager.getClient();
+	
+	//Retrieve auth node from cache
+	//if not found, rejects the user
+	redisClient.select(Redis.databases.AUTH_DB, function() {
+		redisClient.get(pkt.aid, function( err, data ) {
+			if(err || data == null) {
+				return onAuthenticationNotFound();
+			}
+			
+			let authNode = JSON.parse(data);
+			
+			if(authNode.authNode !== pkt.authCode ||
+				authNode.userLevel !== pkt.userLevel ||
+				authNode.sex !== pkt.sex ||
+				authNode.ip !== socket.remoteAddress)
+				{
+					return onAuthenticationNotFound();
+				}
+				
+			return onAuthenticationSuccess();
+		});	
+	});
 
 	//TO DO: Verificar se player já não está online
-
-	//send character list
-	responsePkt = new Packets.OUT.ACCEPT_ENTER_NEO_UNION();
-
-	fwdResponse();
+	
+	function onAuthenticationNotFound() {
+		//reject user
+		responsePkt = new Packets.OUT.REFUSE_ENTER();
+		responsePkt.errorCode = 0; //rejected from server
+		
+		fwdResponse();
+	}
+	
+	function onAuthenticationSuccess() {
+		//send character list
+		responsePkt = new Packets.OUT.ACCEPT_ENTER_NEO_UNION();
+		
+		fwdResponse();
+	}
 
 	/**
       * Send response back to client and close the connection

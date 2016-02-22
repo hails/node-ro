@@ -6,7 +6,7 @@ var DBConfig    = require('../configuration/database.js');
   *
   * Handles connections to MongoDB
   *
-  * @author Alvaro Bezerra <alvaro.dasmerces@gmail.com>
+  * @author Alvaro Bezerra <https://github.com/alvarodms>
 */
 
 var MongoClient = MongoDB.MongoClient;
