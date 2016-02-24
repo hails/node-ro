@@ -3,9 +3,11 @@
 var Authentication 			= require('./services/authentication.js');
 var NetworkUtils 			= require('../utils/network.js');
 var Packets 				= require('../packets/packetStructure.js');
-var NodeServer 				= require('../server.js');
+var NetworkConfig 			= require('../configuration/network.js').network;
 var Redis 					= require('../database/redisManager.js');
 var AuthenticationNode 		= require('../model/authenticationNode.js');
+
+console.log("netw", NetworkConfig);
 
 /**
   * Node Emulator Project
@@ -33,8 +35,8 @@ LoginEngine.onLoginRequest = function( pkt, socket ) {
 		responsePkt.lastLoginTime = '';
 		responsePkt.sex = 1;
 		responsePkt.serverList = [{
-			ip: 		NetworkUtils.ipToLong(global._NODE.server.config.network.ipAddress),
-			port: 		NodeServer.config.network.port,
+			ip: 		NetworkUtils.ipToLong(NetworkConfig.ipAddress),
+			port: 		NetworkConfig.port,
 			name:   	'NodeRO',
 			userCount:  0,
 			state:      0, //0 = normal, 1 = on maintenance, 2 = 18+ only, 3 = p2p server

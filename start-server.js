@@ -26,14 +26,14 @@ console.log("[ I ] Node Emulator is starting...");
 Async.parallel([
   /** MongoDB initialization */
   function( callback ) {
-    new MongoDB(x => {
-      return callback();
+    new MongoDB(( dbInstance ) => {
+      return callback( null, dbInstance );
     });
   },
   
   /** Redis initialization */
   function( callback ) {
-    Redis.manager.init(x => {
+    Redis.manager.init(() => {
       return callback();
     });
   }
@@ -43,7 +43,7 @@ Async.parallel([
     return process.exit(1);
   }
   
-  return onDatabasesReady();
+  return onDatabasesReady(results[0]);
 });
 
 function onDatabasesReady( _db ) {

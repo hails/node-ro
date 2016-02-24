@@ -1,5 +1,5 @@
-var Async      = require('async');
-var NodeServer = require('../../server.js');
+var Async        = require('async');
+var ClientConfig = require('../../configuration/client.js').client;
 
 /**
   * Node Emulator Project
@@ -68,7 +68,7 @@ AuthenticationService.authenticateUser = function( userData, onUserAccepted, onU
   * @param	{function}	onComplete		Function called when the method is complete  
 */
 AuthenticationService.isClientVersionAllowed = function( onComplete ) {
-	if(NodeServer.config.client.checkClientVersion && this.version != NodeServer.config.client.clientVersionToConnect) {
+	if(ClientConfig.checkClientVersion && this.version != ClientConfig.clientVersionToConnect) {
 		onComplete({
 			code: LOGIN_ERROR.NotLastestGameEXE
 		});

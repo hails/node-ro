@@ -1,3 +1,5 @@
+'use strict';
+
 var net 			= require('net');
 var Cluster			= require('cluster');
 var Logger 			= require('./utils/logger.js');
@@ -6,50 +8,49 @@ var PacketHandler	= require('./network/packetHandler.js');
 /**
   * Node Emulator Project
   *
-  * Instantiate a TCP/IP node emulator server
+  * Node Emulator Server class
   *
   * @author Alvaro Bezerra <https://github.com/alvarodms>
 */
 
-var NodeServer = function() {
-	this.isRunning = false;
-	this.config = null;
-	this.mainPid = null;
-	this.clustersPid = [];
-};
-
-var startServer = function() {
-	console.log("[ I ] Starting node-server ...");
-
-	console.log("[ I ] Loading configuration files...");
-	NodeServer.config = readServerConfig();
-	console.log("[ I ] Done loading configuration files.".green);
-
-	if(NodeServer.config.features.useClusters && Cluster.isMaster) {
-		NodeServer.mainPid = process.pid;
-
-		for(var i = 0; i < NodeServer.config.features.numberOfClusters; i++) {
-			Cluster.fork();
-		}
+class NodeServer {
+	constructor() {
+		this.config = null;
+		this.mainPid = null;
+		this.clustersPid = [];
 	}
-	else {
-		try {
-			net.createServer(PacketHandler)
-				.listen(NodeServer.config.network.port, NodeServer.config.network.ipAddress, function() {
-					console.log("  --> Node-server is ready on %s:%s [Main PID: %s]".green,
-						NodeServer.config.network.ipAddress, NodeServer.config.network.port, NodeServer.mainPid || process.pid);
 
-					NodeServer.isRunning = true;
-				});
-		}
-		catch(ex) {
-			Logger.logError(ex);
-			console.error("[ E ] Error while starting node-server. See logs for more details.".red);
+	start() {
+		console.log("[ I ] Starting node-server ...");
 
-			process.exit(1);
+		console.log("[ I ] Loading configuration files...");
+		this.config = readServerConfig();
+		console.log("[ I ] Done loading configuration files.".green);
+
+		if(this.config.features.useClusters && Cluster.isMaster) {
+			this.mainPid = process.pid;
+
+			for(var i = 0; i < this.config.features.numberOfClusters; i++) {
+				Cluster.fork();
+			}
 		}
+		else {
+			try {
+				net.createServer(PacketHandler)
+					.listen(this.config.network.port, this.config.network.ipAddress, () => {
+						console.log("  --> Node-server is ready on %s:%s [Main PID: %s]".green,
+							this.config.network.ipAddress, this.config.network.port, this.mainPid || process.pid);
+					});
+			}
+			catch(ex) {
+				Logger.logError(ex);
+				console.error("[ E ] Error while starting node-server. See logs for more details.".red);
+
+				process.exit(1);
+			}
+		}		
 	}
-};
+}
 
 function readServerConfig() {
 	var 
@@ -62,6 +63,8 @@ function readServerConfig() {
 	return _config;
 }
 
+// startup initilization
+var _serverInstance = new NodeServer();
+
 //export
-exports.start = startServer;
-exports.get = NodeServer;
+module.exports = _serverInstance;
