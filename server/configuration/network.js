@@ -17,6 +17,6 @@ module.exports = {
 		/**
 		  * Server Port
 		*/
-		port: 6900
+		port: '6900'
 	}
 };

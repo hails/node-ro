@@ -1,13 +1,18 @@
 {
   "name": "node-emulator",
   "version": "1.0.0",
-  "description": "",
+  "description": "A Ragnarok Online Emulator written with node.js",
   "main": "start-server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Alvaro Bezerra <https://github.com/alvarodms>",
   "license": "ISC",
   "dependencies": {
+    "async" : "1.5.x",
+    "colors" : "1.1.x",
+    "mongo-mock" : "1.2.x",
+    "redis" : "*",
+    "moment" : "2.11.x"
   }
 }

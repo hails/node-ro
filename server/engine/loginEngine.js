@@ -108,11 +108,12 @@ LoginEngine.onLoginSuccess = function( pkt, socket ) {
 					return onAuthenticationNotFound();
 				}
 				
+			//delete auth node
+			redisClient.del(pkt.aid);
+				
 			return onAuthenticationSuccess();
 		});	
 	});
-
-	//TO DO: Verificar se player já não está online
 	
 	function onAuthenticationNotFound() {
 		//reject user
@@ -123,6 +124,8 @@ LoginEngine.onLoginSuccess = function( pkt, socket ) {
 	}
 	
 	function onAuthenticationSuccess() {
+		//TO DO: Verificar se player já não está online
+		
 		//send character list
 		responsePkt = new Packets.OUT.ACCEPT_ENTER_NEO_UNION();
 		

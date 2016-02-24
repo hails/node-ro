@@ -43,7 +43,7 @@ var startServer = function() {
 				});
 		}
 		catch(ex) {
-			Logger.loginServer.logError(ex);
+			Logger.logError(ex);
 			console.error("[ E ] Error while starting node-server. See logs for more details.".red);
 
 			process.exit(1);

@@ -1,5 +1,6 @@
 var fs 		= require('fs');
 var path 	= require('path');
+var moment  = require('moment');
 
 /**
   * Node Emulator Project
@@ -9,22 +10,18 @@ var path 	= require('path');
   * @author Alvaro Bezerra <https://github.com/alvarodms>
 */
 
-const LoginLogsPath = path.join(__dirname, '../../logs', 'login-server.log');
-const CharLogsPath = path.join(__dirname, '../../logs', 'char-server.log');
-const MapLogsPath = path.join(__dirname, '../../logs', 'map-server.log');
+const LogsPath = path.join(__dirname, '../../logs', 'node-server.log');
+const LogDateFormat = "YYYY-MM-DD HH:mm:ss";
+
+var Logger = {};
+
+Logger.logInfo = function( info ) {
+	fs.writeFile(moment().format(LogDateFormat) + " " + LogsPath, info, 'utf8');
+};
+
+Logger.logError = function( error ) {
+	fs.writeFile(moment().format(LogDateFormat) + " " + LogsPath, error, 'utf8');
+};
 
 //export
-var Logger = {};
 module.exports = Logger;
-
-Logger.loginServer = {};
-Logger.charServer = {};
-Logger.mapServer = {};
-
-Logger.loginServer.logInfo = function( info ) {
-	fs.writeFile(LoginLogsPath, info, 'utf8');
-};
-
-Logger.loginServer.logError = function( error ) {
-	fs.writeFile(LoginLogsPath, error, 'utf8');
-};

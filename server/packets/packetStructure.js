@@ -96,6 +96,31 @@ PACKET.OUT.REFUSE_LOGIN_R2.prototype.toBuffer = function() {
 
 };
 
+// 0x82d
+PACKET.OUT.ACCEPT_ENTER_NEO_UNION_HEADER = function() {
+	this.totalSlotNum = 0;
+	this.premiumStartSlot = 0;
+	this.premiumEndSlot = 0;
+	this.dummy1_beginBilling = 0;
+	this.code = 0;
+	this.charInfo = [];	
+};
+PACKET.OUT.ACCEPT_ENTER_NEO_UNION_HEADER.prototype.toBuffer = function() {
+	var buf 	= new Buffer(29),
+		offset	= 0;
+		
+	offset = buf.writeUInt16LE(0x82d, offset); //packet type/id
+	offset = buf.writeUInt16LE(29, offset); //packet size
+	offset = buf.writeUInt8(1, offset); //available slots??
+	offset = buf.writeUInt8(9 - 1, offset); //max_chars - available slots??
+	offset = buf.writeUInt8(0, offset); //?????
+	offset = buf.writeUInt8(1, offset); //?????
+	offset = buf.writeUInt8(1, offset); //?????
+	offset = buf.write('', offset, 20); //unused bytes
+	
+	return buf;
+};
+
 // 0x6b
 PACKET.OUT.ACCEPT_ENTER_NEO_UNION = function() {
 	this.totalSlotNum = 0;
