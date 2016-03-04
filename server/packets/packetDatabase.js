@@ -1,5 +1,5 @@
-var PacketStructure 	= require('./packetStructure.js');
-var LoginEngine			= require('../engine/loginEngine.js');
+var PacketStructure 		= require('./packetStructure.js');
+var AuthenticationEngine	= require('../engine/authenticationEngine.js');
 
 /**
   * Node Emulator Project
@@ -12,8 +12,8 @@ var LoginEngine			= require('../engine/loginEngine.js');
 //export
 module.exports = {
 	//in
-	0x64: { struct: PacketStructure.IN.LOGIN, handler: LoginEngine.onLoginRequest },
-	0x65: { struct: PacketStructure.IN.ENTER, handler: LoginEngine.onLoginSuccess },
+	0x64: { struct: PacketStructure.IN.LOGIN, handler: AuthenticationEngine.onAuthenticationRequest },
+	0x65: { struct: PacketStructure.IN.ENTER, handler: AuthenticationEngine.onLoginRequest },
 
 	//out
 	0x69: { struct: PacketStructure.OUT.ACCEPT_LOGIN }

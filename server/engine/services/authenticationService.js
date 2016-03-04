@@ -2,12 +2,12 @@ var Async        = require('async');
 var ClientConfig = require('../../configuration/client.js').client;
 
 /**
-  * Node Emulator Project
-  *
-  * User authentication services
-  *
-  * @author Alvaro Bezerra <https://github.com/alvarodms>
-*/
+ * Node Emulator Project
+ *
+ * User authentication services
+ *
+ * @author Alvaro Bezerra <https://github.com/alvarodms>
+ */
 
 var AuthenticationService = {};
 
@@ -36,7 +36,7 @@ const LOGIN_ERROR = {
 	DeletingSpouseChar: 104			// 104 = This character is being deleted. Login is temporarily unavailable for the time being
 };
 
-AuthenticationService.authenticateUser = function( userData, onUserAccepted, onUserRejected ) {
+AuthenticationService.authenticateUser = function authenticateUser( userData, onUserAccepted, onUserRejected ) {
 	Async.waterfall([
 		//TO DO: Check for DNS Blacklist
 
@@ -62,12 +62,12 @@ AuthenticationService.authenticateUser = function( userData, onUserAccepted, onU
 };
 
 /**
-  * Client version check
-  *
-  * @this   {PACKET.OUT.ACCEPT_LOGIN}	Packet structure with user's login data
-  * @param	{function}	onComplete		Function called when the method is complete  
-*/
-AuthenticationService.isClientVersionAllowed = function( onComplete ) {
+ * Client version check
+ *
+ * @this   {PACKET.OUT.ACCEPT_LOGIN}	Packet structure with user's login data
+ * @param	{function}	onComplete		Function called when the method is complete  
+ */
+AuthenticationService.isClientVersionAllowed = function isClientVersionAllowed( onComplete ) {
 	if(ClientConfig.checkClientVersion && this.version != ClientConfig.clientVersionToConnect) {
 		onComplete({
 			code: LOGIN_ERROR.NotLastestGameEXE
@@ -81,17 +81,16 @@ AuthenticationService.isClientVersionAllowed = function( onComplete ) {
 };
 
 /**
-  * Check if account is registered
-  *
-  * @this   {PACKET.OUT.ACCEPT_LOGIN}	Packet structure with user's login data
-  * @param	{function}	onComplete		Function called when the method is complete
-*/
-AuthenticationService.isAccountRegistered = function( onComplete ) {
+ * Check if account is registered
+ *
+ * @this   {PACKET.OUT.ACCEPT_LOGIN}	Packet structure with user's login data
+ * @param	{function}	onComplete		Function called when the method is complete
+ */
+AuthenticationService.isAccountRegistered = function isAccountRegistered( onComplete ) {
 	if(!this.id || this.id == '' || this.id.length < 4) {
-		onComplete({
+		return onComplete({
 			code: LOGIN_ERROR.UnregisteredId
 		});
-		return;
 	}
 
 	global._NODE.db
@@ -111,13 +110,13 @@ AuthenticationService.isAccountRegistered = function( onComplete ) {
 };
 
 /**
-  * Check user and password provided
-  *
-  * @this   {PACKET.OUT.ACCEPT_LOGIN}	Packet structure with user's login data
-  * @param	{object}	userAccount		User's doc retrieved from database
-  * @param	{function}	onComplete		Function called when the method is complete
-*/
-AuthenticationService.isUserAndPasswordValid = function( userAccount, onComplete ) {
+ * Check user and password provided
+ *
+ * @this   {PACKET.OUT.ACCEPT_LOGIN}	Packet structure with user's login data
+ * @param	{object}	userAccount		User's doc retrieved from database
+ * @param	{function}	onComplete		Function called when the method is complete
+ */
+AuthenticationService.isUserAndPasswordValid = function isUserAndPasswordValid( userAccount, onComplete ) {
 	if(userAccount.password !== this.password) {
 		return onComplete({
 			code: LOGIN_ERROR.IncorrectPassword

@@ -2,11 +2,9 @@
   * Node Emulator Project
   *
   * Server packets structure
-  * Based on roBrowser project <https://github.com/vthibault/roBrowser/>
-
   * PACKET.IN:  Client -> Server packets
   * PACKET.OUT: Server -> Client packets
-
+  *
   * @author Alvaro Bezerra <https://github.com/alvarodms>
 */
 
@@ -15,7 +13,7 @@ var PACKET 		= {};
 	PACKET.OUT	= {};
 
 // 0x64
-PACKET.IN.LOGIN = function( pReader ) {
+PACKET.IN.LOGIN = function LOGIN( pReader ) {
 	this.version 	= pReader.readUInt32();
 	this.id 		= pReader.readString(24);
 	this.password 	= pReader.readString(24);
@@ -24,7 +22,7 @@ PACKET.IN.LOGIN = function( pReader ) {
 PACKET.IN.LOGIN.size = 55;
 
 // 0x65
-PACKET.IN.ENTER = function( pReader ) {
+PACKET.IN.ENTER = function ENTER( pReader ) {
 	this.aid 		= pReader.readUInt32();
 	this.authCode 	= pReader.readUInt32();
 	this.userLevel	= pReader.readUInt32();
@@ -34,7 +32,7 @@ PACKET.IN.ENTER = function( pReader ) {
 PACKET.IN.ENTER.size = 17;
 
 // 0x69
-PACKET.OUT.ACCEPT_LOGIN = function() {
+PACKET.OUT.ACCEPT_LOGIN = function ACCEPT_LOGIN() {
 	this.authCode 		= 0;
 	this.aid 			= 0;
 	this.userLevel 		= 0;
@@ -43,7 +41,7 @@ PACKET.OUT.ACCEPT_LOGIN = function() {
 	this.sex 			= '';
 	this.serverList 	= [];
 };
-PACKET.OUT.ACCEPT_LOGIN.prototype.toBuffer = function() {
+PACKET.OUT.ACCEPT_LOGIN.prototype.toBuffer = function toBuffer() {
 	var buf 	= new Buffer(47 + 32*this.serverList.length).fill(0),
 		offset	= 0;
 
@@ -72,11 +70,11 @@ PACKET.OUT.ACCEPT_LOGIN.prototype.toBuffer = function() {
 };
 
 // 0x6a
-PACKET.OUT.REFUSE_LOGIN = function() {
+PACKET.OUT.REFUSE_LOGIN = function REFUSE_LOGIN() {
 	this.errorCode = 0;
 	this.blockDate = '';
 };
-PACKET.OUT.REFUSE_LOGIN.prototype.toBuffer = function() {
+PACKET.OUT.REFUSE_LOGIN.prototype.toBuffer = function toBuffer() {
 	var buf 	= new Buffer(23).fill(0),
 		offset 	= 0;
 
@@ -88,16 +86,16 @@ PACKET.OUT.REFUSE_LOGIN.prototype.toBuffer = function() {
 };
 
 // 0x83e
-PACKET.OUT.REFUSE_LOGIN_R2 = function() {
+PACKET.OUT.REFUSE_LOGIN_R2 = function REFUSE_LOGIN_R2() {
 	this.errorCode = 0;
 	this.blockDate = '';
 };
-PACKET.OUT.REFUSE_LOGIN_R2.prototype.toBuffer = function() {
+PACKET.OUT.REFUSE_LOGIN_R2.prototype.toBuffer = function toBuffer() {
 
 };
 
 // 0x82d
-PACKET.OUT.ACCEPT_ENTER_NEO_UNION_HEADER = function() {
+PACKET.OUT.ACCEPT_ENTER_NEO_UNION_HEADER = function ACCEPT_ENTER_NEO_UNION_HEADER() {
 	this.totalSlotNum = 0;
 	this.premiumStartSlot = 0;
 	this.premiumEndSlot = 0;
@@ -105,8 +103,8 @@ PACKET.OUT.ACCEPT_ENTER_NEO_UNION_HEADER = function() {
 	this.code = 0;
 	this.charInfo = [];	
 };
-PACKET.OUT.ACCEPT_ENTER_NEO_UNION_HEADER.prototype.toBuffer = function() {
-	var buf 	= new Buffer(29),
+PACKET.OUT.ACCEPT_ENTER_NEO_UNION_HEADER.prototype.toBuffer = function toBuffer() {
+	var buf 	= new Buffer(29).fill(0),
 		offset	= 0;
 		
 	offset = buf.writeUInt16LE(0x82d, offset); //packet type/id
@@ -122,7 +120,7 @@ PACKET.OUT.ACCEPT_ENTER_NEO_UNION_HEADER.prototype.toBuffer = function() {
 };
 
 // 0x6b
-PACKET.OUT.ACCEPT_ENTER_NEO_UNION = function() {
+PACKET.OUT.ACCEPT_ENTER_NEO_UNION = function ACCEPT_ENTER_NEO_UNION() {
 	this.totalSlotNum = 0;
 	this.premiumStartSlot = 0;
 	this.premiumEndSlot = 0;
@@ -133,8 +131,8 @@ PACKET.OUT.ACCEPT_ENTER_NEO_UNION = function() {
 	//this.dummy1_endbilling = '';
 	this.charInfo = [];
 };
-PACKET.OUT.ACCEPT_ENTER_NEO_UNION.prototype.toBuffer = function() {
-	var buf 	= new Buffer(27 + 3*114),
+PACKET.OUT.ACCEPT_ENTER_NEO_UNION.prototype.toBuffer = function toBuffer() {
+	var buf 	= new Buffer(27 + 3*114).fill(0),
 		offset	= 0;
 
 	offset = buf.writeUInt16LE(0x6b, offset); //packet type/id
@@ -148,15 +146,30 @@ PACKET.OUT.ACCEPT_ENTER_NEO_UNION.prototype.toBuffer = function() {
 };
 
 // 0x6c
-PACKET.OUT.REFUSE_ENTER = function() {
+PACKET.OUT.REFUSE_ENTER = function REFUSE_ENTER() {
 	this.errorCode = 0;
 };
-PACKET.OUT.REFUSE_ENTER.prototype.toBuffer = function() {
-	var buf		= new Buffer(3),
+PACKET.OUT.REFUSE_ENTER.prototype.toBuffer = function toBuffer() {
+	var buf		= new Buffer(3).fill(0),
 		offset  = 0;
 		
 	offset = buf.writeUInt16LE(0x6c, offset); //packet type/id
 	offset = buf.writeUInt8(this.errorCode, offset);
+	
+	return buf;
+};
+
+/**
+ * Packets used to encapsulate single values
+ * that are sent to the client
+*/ 
+PACKET.OUT.UINT32_RESPONSE = function UINT32_RESPONSE() {
+	this.value = 0;	
+};
+PACKET.OUT.UINT32_RESPONSE.property.toBuffer = function toBuffer() {
+	var buf = new Buffer(4).fill(0);
+	
+	buf.writeUInt32LE(this.value);
 	
 	return buf;
 };

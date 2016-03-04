@@ -15,6 +15,13 @@ var PacketHandler = function( socket ) {
 	});
 };
 
+/**
+ * Receives a packet and validate its size and structure.
+ * If everything is ok, call the corresponding engine function
+ * 
+ * @param {Object} data A buffer object
+ * @param {Object} socket Client's socket
+*/
 function onPacketReceived( data, socket ) {
 	if(!data || data.length < 2) {
 		console.log("[ W ] PacketHandler::Invalid data received. Ignoring...".red);
@@ -43,15 +50,20 @@ function onPacketReceived( data, socket ) {
 	var packetInstance = new packetInfo.struct(packetReader);
 
 	/** Call engine function to handle the packet */
-	if(packetInfo.handler && typeof packetInfo.handler === 'function') {
-		packetInfo.handler(packetInstance, socket);
-	}
-	else {
-		console.log("[ W ] PacketHandler::No handler found for packet %s. Ignoring...".yellow, "0x"+packetId.toString(16));
-	}
-
-	return;
+	return packetInfo.handler(packetInstance, onResponseReady);
 };
+
+/**
+ * Send response packet back to client and
+ * may close, or not, the connection
+ * 
+ * @this {Object} Client's socket
+ * @param {Object} response Response packet
+ * @param boolean keepAlive Either keep or not the connection open
+*/
+function onResponseReady( responsePkt, keepAlive ) {
+	return keepAlive ? this.write(responsePkt.toBuffer()) : this.end(responsePkt.toBuffer());
+}
 
 //export
 module.exports = PacketHandler;
