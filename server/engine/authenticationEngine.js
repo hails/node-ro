@@ -1,3 +1,5 @@
+'use strict';
+
 var AuthenticationService   = require('./services/authenticationService.js');
 var NetworkUtils 			= require('../utils/network.js');
 var NetworkConfig 			= require('../configuration/network.js').network;

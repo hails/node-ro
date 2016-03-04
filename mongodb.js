@@ -38,7 +38,7 @@ module.exports = {
                 "password": "abc123",
                 "sex": "M",
                 "email": "alvaro.dasmerces@gmail.com",
-                "_id": ObjectID("56cd12ff3be85f1bf03b8f65")
+                "_id": ObjectID("56d9dc73d945970f0b511e64")
               }
             ]
           }

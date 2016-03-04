@@ -166,7 +166,7 @@ PACKET.OUT.REFUSE_ENTER.prototype.toBuffer = function toBuffer() {
 PACKET.OUT.UINT32_RESPONSE = function UINT32_RESPONSE() {
 	this.value = 0;	
 };
-PACKET.OUT.UINT32_RESPONSE.property.toBuffer = function toBuffer() {
+PACKET.OUT.UINT32_RESPONSE.prototype.toBuffer = function toBuffer() {
 	var buf = new Buffer(4).fill(0);
 	
 	buf.writeUInt32LE(this.value);
