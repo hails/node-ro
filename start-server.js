@@ -1,10 +1,11 @@
 #!/usr/bin/env node
 
 require('colors');
-var NodeServer  = require('./server/server.js');
-var MongoDB     = require('./server/infrastructure/mongoManager.js');
-var Redis       = require('./server/infrastructure/redisManager.js');
-var Async       = require('async');
+var NodeServer = require('./server/server.js');
+var MongoDB = require('./server/infrastructure/mongoManager.js');
+var Redis = require('./server/infrastructure/redisManager.js');
+var Async = require('async');
+var Logger = require('./server/utils/logger.js');
 
 /**
   * Node Emulator Project
@@ -15,13 +16,11 @@ var Async       = require('async');
   * @since		2015-12-03
 */
 
-global._NODE = {};
-
 console.log("---- <Node Emulator Project> ----".blue);
 console.log("---- A ragnarok emulator written with node.js ----".blue);
 console.log("---- by Alvaro Bezerra <https://github.com/alvarodms> ----".blue);
 
-console.log("[ I ] Node Emulator is starting...");
+Logger.info("Node Emulator is starting...");
 
 /** Connect to Mongo and Redis in parallel */
 Async.parallel([
@@ -29,7 +28,7 @@ Async.parallel([
   startRedis
 ], function( error, results ) {
   if(error) {
-    console.log("[ E ] StartServer::An error occurred while connecting to MySQL and/or Redis. See logs for more details.".red);
+    Logger.error("StartServer::An error occurred while connecting to MySQL and/or Redis. See logs for more details.");
     return process.exit(1);
   }
   

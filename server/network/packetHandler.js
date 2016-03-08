@@ -1,5 +1,6 @@
-var PacketDB 		= require('../packets/packetDatabase.js');
-var PacketReader	= require('../utils/packetReader.js');
+var PacketDB = require('../packets/packetDatabase.js');
+var PacketReader = require('../utils/packetReader.js');
+var Logger = require('../utils/logger.js');
 
 /**
   * Node Emulator Project
@@ -24,7 +25,7 @@ var PacketHandler = function( socket ) {
 */
 function onPacketReceived( data, socket ) {
 	if(!data || data.length < 2) {
-		console.log("[ W ] PacketHandler::Invalid data received. Ignoring...".red);
+		Logger.warn("PacketHandler::Invalid data received. Ignoring...");
 		return;
 	}
 
@@ -36,13 +37,13 @@ function onPacketReceived( data, socket ) {
 	
 	/** Check if packet is in database */
 	if(!packetInfo) {
-		console.log("[ W ] PacketHandler::Unknown packet %s received. Ignoring...".yellow, "0x"+packetId.toString(16));
+		Logger.warn("PacketHandler::Unknown packet %s received. Ignoring...", "0x"+packetId.toString(16));
 		return;
 	}
 
 	/** Check if packet has the correct size */
 	if(packetInfo.struct.size != data.length) {
-		console.log("[ W ] PacketHandler::Packet %s with invalid size. Ignoring...".yellow, "0x"+packetId.toString(16));
+		Logger.warn("PacketHandler::Packet %s with invalid size. Ignoring...", "0x"+packetId.toString(16));
 		return;
 	}
 

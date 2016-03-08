@@ -1,6 +1,7 @@
 'use strict';
 
 var MongoDB = require('../infrastructure/mongoManager.js');
+var Logger = require('../utils/logger.js');
 
 /**
   * Node Emulator Project
@@ -37,10 +38,10 @@ class AccountModel {
             });
     }
     
-    static findAccount(query, callback) {
+    static findByUserId(_userId, callback) {
         MongoDB.manager.getDatabase()
             .collection(AccountCollection)
-            .findOne(query, function( err, docs ) {
+            .findOne({ userId: _userId }, function( err, docs ) {
                 handleError(err);
                 
                 return callback(docs || null);
@@ -51,7 +52,7 @@ class AccountModel {
 /** Log unexpected errors to console */
 function handleError( err ) {
     if(err) {
-        console.log("[ E ] AccountModel::An unexpected error ocurred. See logs for more details...".red);
+        Logger.error("AccountModel::An unexpected error ocurred: " + err.toString());
     }
     
     return;

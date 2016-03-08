@@ -2,6 +2,7 @@
 
 var Redis = require('redis');
 var DBConfig = require('../configuration/database.js');
+var Logger = require('../utils/logger.js');
 
 /**
   * Node Emulator Project
@@ -27,17 +28,17 @@ class RedisManager {
      * @param	{function}	onRedisReady    Function called when a connection to Redis server is succesfully established
      */
     static init( onRedisReady ) {
-        console.log("[ I ] Connecting to Redis server...");
+        Logger.info("Connecting to Redis server...");
         
         client = Redis.createClient({ host: DBConfig.redisAddress, port: DBConfig.redisPort });
         
         client.on('connect', function() {
-            console.log("[ I ] Successfully connected to Redis server!".green);
+            Logger.success("Successfully connected to Redis server!");
             return onRedisReady();
         });
         
         client.on('error', function() {
-            console.log("[ E ] RedisManager::Error while trying to connect to Redis server. See logs for more details.".red);
+            Logger.error("RedisManager::Error while trying to connect to Redis server. See logs for more details.");
             return process.exit(1);
         });
     }

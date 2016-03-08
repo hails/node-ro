@@ -1,11 +1,12 @@
 'use strict';
 
-var AuthenticationService   = require('./services/authenticationService.js');
-var NetworkUtils 			= require('../utils/network.js');
-var NetworkConfig 			= require('../configuration/network.js').network;
-var Packets 				= require('../packets/packetStructure.js');
-var Redis 					= require('../infrastructure/redisManager.js');
-var AuthenticationNode 		= require('../model/authenticationNode.js');
+var AuthenticationService = require('./services/authenticationService.js');
+var NetworkUtils = require('../utils/network.js');
+var NetworkConfig = require('../configuration/network.js').network;
+var Packets = require('../packets/packetStructure.js');
+var Redis = require('../infrastructure/redisManager.js');
+var AuthenticationNode = require('../model/authenticationNode.js');
+var Logger = require('../utils/logger.js');
 
 /**
  * Node Emulator Project
@@ -87,7 +88,7 @@ class AuthenticationEngine {
     static onLoginRequest( pkt, onResponseReady ) {
     	var responsePkt = {};
     
-    	console.log("[ I ] LoginEngine::request connect - aid: %s/authCode: %s/userLevel: %s", pkt.aid, pkt.authCode, pkt.userLevel);
+    	Logger.info("LoginEngine::request connect - aid: %s/authCode: %s/userLevel: %s", pkt.aid, pkt.authCode, pkt.userLevel);
     
     	//send back account id (why does the client need this?)
     	var aidPkt   = new Packets.OUT.UINT32_RESPONSE();

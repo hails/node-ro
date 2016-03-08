@@ -1,9 +1,10 @@
 'use strict';
 
-var net 			= require('net');
-var Cluster			= require('cluster');
-var Logger 			= require('./utils/logger.js');
-var PacketHandler	= require('./network/packetHandler.js');
+var net = require('net');
+var Cluster = require('cluster');
+var Logger = require('./utils/logger.js');
+var PacketHandler = require('./network/packetHandler.js');
+var sprintf = require('./utils/sprintf.js');
 
 /**
   * Node Emulator Project
@@ -21,11 +22,11 @@ class NodeServer {
 	}
 
 	start() {
-		console.log("[ I ] Starting node-server ...");
+		Logger.info("Starting Node-Server ...");
 
-		console.log("[ I ] Loading configuration files...");
+		Logger.info("Loading configuration files...");
 		this.config = readServerConfig();
-		console.log("[ I ] Done loading configuration files.".green);
+		Logger.success("Done loading configuration files.");
 
 		if(this.config.features.useClusters && Cluster.isMaster) {
 			this.mainPid = process.pid;
@@ -38,14 +39,12 @@ class NodeServer {
 			try {
 				net.createServer(PacketHandler)
 					.listen(this.config.network.port, this.config.network.ipAddress, () => {
-						console.log("  --> Node-server is ready on %s:%s [Main PID: %s]".green,
-							this.config.network.ipAddress, this.config.network.port, this.mainPid || process.pid);
+						Logger.success(sprintf("Node-Server is ready on %s:%s [Main PID: %s]",
+							this.config.network.ipAddress, this.config.network.port, this.mainPid || process.pid));
 					});
 			}
 			catch(ex) {
-				Logger.logError(ex);
-				console.error("[ E ] Error while starting node-server. See logs for more details.".red);
-
+				Logger.error("Error while starting node-server. See logs for more details.");
 				process.exit(1);
 			}
 		}		

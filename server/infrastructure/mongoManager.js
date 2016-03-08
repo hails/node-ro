@@ -1,7 +1,8 @@
 'use strict';
 
-var MongoDB		= require('mongodb');
-var DBConfig    = require('../configuration/database.js');
+var MongoDB	= require('mongodb');
+var DBConfig = require('../configuration/database.js');
+var Logger = require('../utils/logger.js');
 
 /**
   * Node Emulator Project
@@ -22,16 +23,16 @@ class MongoManager {
      * @param	{function}	onMongoReady    Function called when a connection to MongoDB is succesfully established
      */
     static init( onMongoReady ) {
-        console.log("[ I ] Connecting to MongoDB...");
+        Logger.info("Connecting to MongoDB...");
         
         MongoDB.MongoClient.connect(DBConfig.connectionUrl, function( err, db ) {
         	if(err) {
-	            console.log("[ E ] MongoManager::Error while trying to connect to MongoDB. See logs for more details.".red);
+	            Logger.error("MongoManager::Error while trying to connect to MongoDB. See logs for more details.");
 	            return process.exit(1);        		
         	}
         	
         	_db = db;
-            console.log("[ I ] Successfully connected to MongoDB!".green);
+            Logger.success("Successfully connected to MongoDB!");
             
             return onMongoReady();	
         });

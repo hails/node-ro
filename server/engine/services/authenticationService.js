@@ -66,7 +66,7 @@ AuthenticationService.authenticateUser = function authenticateUser( userData, on
 /**
  * Client version check
  *
- * @this {PACKET.OUT.ACCEPT_LOGIN} Packet structure with user's login data
+ * @this {PACKET.OUT.LOGIN} Packet structure with user's login data
  * @param {function} onComplete	Function called when the method is complete  
  */
 AuthenticationService.isClientVersionAllowed = function isClientVersionAllowed( onComplete ) {
@@ -95,7 +95,7 @@ AuthenticationService.isAccountRegistered = function isAccountRegistered( onComp
 		});
 	}
 	
-	AccountModel.findAccount({ userId: this.id}, function( acc ) {
+	AccountModel.findByUserId(this.id, function( acc ) {
 		if(!acc) {
 			if(FeaturesConfig.enableMFRegistration && isMFAccount(this.id)) {
 				/** _M/_F registration is enabled, create a new account */
@@ -119,7 +119,7 @@ AuthenticationService.isAccountRegistered = function isAccountRegistered( onComp
 /**
  * Check user and password provided
  *
- * @this {PACKET.OUT.ACCEPT_LOGIN} Packet structure with user's login data
+ * @this {PACKET.OUT.LOGIN} Packet structure with user's login data
  * @param {Object} userAccount User's doc retrieved from database
  * @param {function} onComplete Function called when the method is complete
  */

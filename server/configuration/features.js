@@ -25,6 +25,24 @@ module.exports = {
 		/**
 		 * Enable account registration via _M/_F?
 		*/ 
-		enableMFRegistration: false
+		enableMFRegistration: false,
+		
+		log: {
+			/**
+			 * Enable logging?
+			 * Note that this is not recommended at production, as it may affect server performance
+			*/ 
+			enableLogging: true,
+			
+			/**
+			 * Defines the type os messages to log
+			 * 
+			 * 1: INFO messages only
+			 * 2: WARNING messages only
+			 * 3: ERROR messages only
+			 * 0: ALL messages
+			*/ 
+			logLevel: 0,
+		}
 	}
 };

@@ -2,4 +2,3 @@ logs/
 node_modules/
 data/
 mongod
-mongodb.js
