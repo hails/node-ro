@@ -9,10 +9,10 @@
   "author": "Alvaro Bezerra <https://github.com/alvarodms>",
   "license": "ISC",
   "dependencies": {
-    "async" : "1.5.x",
-    "colors" : "1.1.x",
-    "mongo-mock" : "1.2.x",
-    "redis" : "*",
-    "moment" : "2.11.x"
+    "async": "1.5.x",
+    "colors": "1.1.x",
+    "moment": "2.11.x",
+    "mongodb": "^2.1.7",
+    "redis": "*"
   }
 }

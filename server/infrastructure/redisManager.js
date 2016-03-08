@@ -1,6 +1,7 @@
 'use strict';
 
 var Redis = require('redis');
+var DBConfig = require('../configuration/database.js');
 
 /**
   * Node Emulator Project
@@ -28,7 +29,7 @@ class RedisManager {
     static init( onRedisReady ) {
         console.log("[ I ] Connecting to Redis server...");
         
-        client = Redis.createClient();
+        client = Redis.createClient({ host: DBConfig.redisAddress, port: DBConfig.redisPort });
         
         client.on('connect', function() {
             console.log("[ I ] Successfully connected to Redis server!".green);

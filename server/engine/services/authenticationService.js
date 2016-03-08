@@ -1,5 +1,7 @@
-var Async        = require('async');
+var Async = require('async');
 var ClientConfig = require('../../configuration/client.js').client;
+var FeaturesConfig = require('../../configuration/features.js').features;
+var AccountModel = require('../../model/accountModel.js');
 
 /**
  * Node Emulator Project
@@ -64,8 +66,8 @@ AuthenticationService.authenticateUser = function authenticateUser( userData, on
 /**
  * Client version check
  *
- * @this   {PACKET.OUT.ACCEPT_LOGIN}	Packet structure with user's login data
- * @param	{function}	onComplete		Function called when the method is complete  
+ * @this {PACKET.OUT.ACCEPT_LOGIN} Packet structure with user's login data
+ * @param {function} onComplete	Function called when the method is complete  
  */
 AuthenticationService.isClientVersionAllowed = function isClientVersionAllowed( onComplete ) {
 	if(ClientConfig.checkClientVersion && this.version != ClientConfig.clientVersionToConnect) {
@@ -83,8 +85,8 @@ AuthenticationService.isClientVersionAllowed = function isClientVersionAllowed( 
 /**
  * Check if account is registered
  *
- * @this   {PACKET.OUT.ACCEPT_LOGIN}	Packet structure with user's login data
- * @param	{function}	onComplete		Function called when the method is complete
+ * @this {PACKET.OUT.LOGIN} Packet structure with user's login data
+ * @param {function} onComplete Function called when the method is complete
  */
 AuthenticationService.isAccountRegistered = function isAccountRegistered( onComplete ) {
 	if(!this.id || this.id == '' || this.id.length < 4) {
@@ -92,29 +94,34 @@ AuthenticationService.isAccountRegistered = function isAccountRegistered( onComp
 			code: LOGIN_ERROR.UnregisteredId
 		});
 	}
-
-	global._NODE.db
-		.collection('login')
-			.find({ userId: this.id }, function( err, docs ) {
-				if(docs.length == 0) {
-					onComplete({
-						code: LOGIN_ERROR.UnregisteredId
+	
+	AccountModel.findAccount({ userId: this.id}, function( acc ) {
+		if(!acc) {
+			if(FeaturesConfig.enableMFRegistration && isMFAccount(this.id)) {
+				/** _M/_F registration is enabled, create a new account */
+				AccountModel.createAccount(this.id, this.password, getMFAccountSex(this.id), 'a@a.com',
+					function( newAcc ) {
+						return onComplete(null, newAcc);
 					});
-				}
-				else {
-					onComplete(null, docs[0]);
-				}
-			});
-
-	return;
+			}
+			else {
+				/** Account not found */
+				return onComplete({
+					code: LOGIN_ERROR.UnregisteredId
+				});	
+			}
+		}
+		
+		return onComplete(null, acc);
+	});
 };
 
 /**
  * Check user and password provided
  *
- * @this   {PACKET.OUT.ACCEPT_LOGIN}	Packet structure with user's login data
- * @param	{object}	userAccount		User's doc retrieved from database
- * @param	{function}	onComplete		Function called when the method is complete
+ * @this {PACKET.OUT.ACCEPT_LOGIN} Packet structure with user's login data
+ * @param {Object} userAccount User's doc retrieved from database
+ * @param {function} onComplete Function called when the method is complete
  */
 AuthenticationService.isUserAndPasswordValid = function isUserAndPasswordValid( userAccount, onComplete ) {
 	if(userAccount.password !== this.password) {
@@ -126,6 +133,30 @@ AuthenticationService.isUserAndPasswordValid = function isUserAndPasswordValid( 
 		return onComplete(null, userAccount);
 	}
 };
+
+/** 
+ * Helper function
+ * Checks if the userId ends with _M or _F
+ * 
+ * @param {String} userId User ID
+ * @return {boolean} Returns true if userId ends with _M or _F
+*/ 
+function isMFAccount( userId ) {
+	var lastTwo = userId.substr(userId.length-2);
+	
+	return lastTwo === "_M" || lastTwo === "_F";
+}
+
+/**
+ * Helper function
+ * Returns the sex of a _M/_F registered account
+ * 
+ * @param {String} userId User ID
+ * @return {String} Returns the sex ('M' or 'F') of the account
+*/ 
+function getMFAccountSex( userId ) {
+	return userId.charAt(userId.length-1);
+}
 
 //export
 AuthenticationService.LOGIN_ERRORS = LOGIN_ERROR;

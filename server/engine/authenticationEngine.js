@@ -4,7 +4,7 @@ var AuthenticationService   = require('./services/authenticationService.js');
 var NetworkUtils 			= require('../utils/network.js');
 var NetworkConfig 			= require('../configuration/network.js').network;
 var Packets 				= require('../packets/packetStructure.js');
-var Redis 					= require('../database/redisManager.js');
+var Redis 					= require('../infrastructure/redisManager.js');
 var AuthenticationNode 		= require('../model/authenticationNode.js');
 
 /**

@@ -1,16 +1,12 @@
 var config = {
 	/** MongoDB connection URL */
 	connectionUrl: 'mongodb://localhost:27017/node-emulator',
-
-	/** Store data as JSON files?
-	  *
-	  * Node Emulator can store data in JSON files if you don't have a MongoDB installation
-	  * This should be only used for testing purposes.
-	*/
-	useJsonStore: false,
-
-	/** JSON file name */
-	jsonFileName: 'mongodb.js'
+	
+	/** Redis server address */
+	redisAddress: '127.0.0.1',
+	
+	/** Redis server port */
+	redisPort: 6379
 };
 
 //export

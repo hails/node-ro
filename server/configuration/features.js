@@ -10,16 +10,21 @@
 module.exports = {
 	features: {
 		/**
-		  * Use clusters?
-		  * Clusters can distribute incoming connections through workers, increasing server overall performance.
-		  *
-		  * See <https://nodejs.org/api/cluster.html> for details.
+		 * Use clusters?
+		 * Clusters can distribute incoming connections through workers, increasing server overall performance.
+		 *
+		 * See <https://nodejs.org/api/cluster.html> for details.
 		*/
 		useClusters: false,
 
 		/**
-	      * Number of clusters
+	     * Number of clusters
 		*/
-		numberOfClusters: 3
+		numberOfClusters: 3,
+		
+		/**
+		 * Enable account registration via _M/_F?
+		*/ 
+		enableMFRegistration: false
 	}
 };
