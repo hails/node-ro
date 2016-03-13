@@ -124,7 +124,7 @@ AuthenticationService.isAccountRegistered = function isAccountRegistered( onComp
  * @param {function} onComplete Function called when the method is complete
  */
 AuthenticationService.isUserAndPasswordValid = function isUserAndPasswordValid( userAccount, onComplete ) {
-	if(userAccount.password !== this.password) {
+	if(!userAccount || userAccount.password !== this.password) {
 		return onComplete({
 			code: LOGIN_ERROR.IncorrectPassword
 		});

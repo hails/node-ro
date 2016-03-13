@@ -35,11 +35,11 @@ class AuthenticationEngine {
     		//everything is fine - send packet 0x69 [ACCEPT_LOGIN] to client
     		responsePkt = new Packets.OUT.ACCEPT_LOGIN();
     		responsePkt.authCode = Math.floor(Math.random() * 100000 + 1);
-    		responsePkt.aid = 2000001;
-    		responsePkt.userLevel = 1;
-    		responsePkt.lastLoginIp = 0;
-    		responsePkt.lastLoginTime = '';
-    		responsePkt.sex = 1;
+    		responsePkt.aid = userAccount.accountId;
+    		responsePkt.userLevel = userAccount.level;
+    		responsePkt.lastLoginIp = userAccount.lastLoginIp;
+    		responsePkt.lastLoginTime = userAccount.lastLoginTime;
+    		responsePkt.sex = userAccount.sex;
     		responsePkt.serverList = [{
     			ip: 		NetworkUtils.ipToLong(NetworkConfig.ipAddress),
     			port: 		NetworkConfig.port,
@@ -83,7 +83,7 @@ class AuthenticationEngine {
      * Sent by client when the user selects a char-server to login
      * 
      * @param {Object} pkt 0x65 packet structure
-     * @param {Object} scoket Client's socket
+     * @param {Object} socket Client's socket
     */
     static onLoginRequest( pkt, onResponseReady ) {
     	var responsePkt = {};
@@ -93,7 +93,7 @@ class AuthenticationEngine {
     	//send back account id (why does the client need this?)
     	var aidPkt   = new Packets.OUT.UINT32_RESPONSE();
         aidPkt.value = pkt.aid;
-    	onResponseReady(aidPkt, true);
+    	onResponseReady(aidPkt);
     
     	var redisClient = Redis.manager.getClient();
     	
@@ -131,7 +131,7 @@ class AuthenticationEngine {
     	}
     	
     	function onUserAccepted() {
-    		//TO DO: Verificar se player já não está online
+    		//TO DO: Check if player is not online already
     		
     		//send character list
     		responsePkt = new Packets.OUT.ACCEPT_ENTER_NEO_UNION();

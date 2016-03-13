@@ -46,6 +46,28 @@ class MongoManager {
     static getDatabase() {
         return _db;
     }
+    
+    /**
+     * Updates a sequence and returns its new value
+     * 
+     * @param {String} seqName The name of the sequence
+     * @param {function} callback Callback function
+     * @returns {Number} Sequence's new value
+    */ 
+    static getNextSequence( seqName, callback ) {
+        _db.collection('counters')
+            .findAndModify(
+                { "_id": seqName },
+                { "$inc": { seq: 1 } },
+                function( err, doc ) {
+                    if(err) {
+                        return callback(err);
+                    }
+                    
+                    return callback(null, doc._id);
+                }
+            );
+    }
 }
 
 //export

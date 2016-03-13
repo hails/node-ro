@@ -1,6 +1,7 @@
 var PacketDB = require('../packets/packetDatabase.js');
 var PacketReader = require('../utils/packetReader.js');
 var Logger = require('../utils/logger.js');
+var printf = require('../utils/printf.js');
 
 /**
   * Node Emulator Project
@@ -37,13 +38,13 @@ function onPacketReceived( data, socket ) {
 	
 	/** Check if packet is in database */
 	if(!packetInfo) {
-		Logger.warn("PacketHandler::Unknown packet %s received. Ignoring...", "0x"+packetId.toString(16));
+		Logger.warn(printf("PacketHandler::Unknown packet %s received. Ignoring...", "0x"+packetId.toString(16)));
 		return;
 	}
 
 	/** Check if packet has the correct size */
 	if(packetInfo.struct.size != data.length) {
-		Logger.warn("PacketHandler::Packet %s with invalid size. Ignoring...", "0x"+packetId.toString(16));
+		Logger.warn(printf("PacketHandler::Packet %s with invalid size. Ignoring...", "0x"+packetId.toString(16)));
 		return;
 	}
 
@@ -55,15 +56,13 @@ function onPacketReceived( data, socket ) {
 };
 
 /**
- * Send response packet back to client and
- * may close, or not, the connection
+ * Send response packet back to client
  * 
  * @this {Object} Client's socket
  * @param {Object} response Response packet
- * @param boolean keepAlive Either keep or not the connection open
 */
 function onResponseReady( responsePkt, keepAlive ) {
-	return keepAlive ? this.write(responsePkt.toBuffer()) : this.end(responsePkt.toBuffer());
+	return this.write(responsePkt.toBuffer());
 }
 
 //export

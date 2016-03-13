@@ -31,6 +31,30 @@ PACKET.IN.ENTER = function ENTER( pReader ) {
 };
 PACKET.IN.ENTER.size = 17;
 
+// 0x67
+PACKET.IN.MAKE_CHAR = function MAKE_CHAR( pReader ) {
+	this.charName = '';
+	this.str = 0;
+	this.agi = 0;
+	this.vit = 0;
+	this.int = 0;
+	this.dex = 0;
+	this.luk = 0;
+	this.charNum = 0;
+	this.headPal = 0;
+	this.head = 0;
+};
+PACKET.IN.MAKE_CHAR.size = 35;
+
+// 0x970
+PACKET.IN.MAKE_CHAR2 = function MAKE_CHAR2( pReader ) {
+	this.charName = '';
+	this.charNum = 0;
+	this.headPal = 0;
+	this.head = 0;
+};
+PACKET.IN.MAKE_CHAR2.size = 29;
+
 // 0x69
 PACKET.OUT.ACCEPT_LOGIN = function ACCEPT_LOGIN() {
 	this.authCode 		= 0;
@@ -155,6 +179,21 @@ PACKET.OUT.REFUSE_ENTER.prototype.toBuffer = function toBuffer() {
 		
 	offset = buf.writeUInt16LE(0x6c, offset); //packet type/id
 	offset = buf.writeUInt8(this.errorCode, offset);
+	
+	return buf;
+};
+
+// 0x187
+PACKET.PING = function PING() {
+	this.aid = 0;
+};
+PACKET.PING.size = 6;
+PACKET.PING.prototype.toBuffer = function toBuffer() {
+	var buf 	= new Buffer(6).fill(0),
+		offset  = 0;
+	
+	offset = buf.writeUInt16LE(0x187, offset); //packet type/id
+	offset = buf.writeUInt32LE(this.aid, offset);
 	
 	return buf;
 };
