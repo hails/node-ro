@@ -1,7 +1,7 @@
 var PacketDB = require('../packets/packetDatabase.js');
 var PacketReader = require('../utils/packetReader.js');
 var Logger = require('../utils/logger.js');
-var printf = require('../utils/printf.js');
+var printf = require('../utils/sprintf.js');
 
 /**
   * Node Emulator Project
