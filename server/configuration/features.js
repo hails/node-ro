@@ -25,14 +25,14 @@ module.exports = {
 		/**
 		 * Enable account registration via _M/_F?
 		*/ 
-		enableMFRegistration: false,
+		enableMFRegistration: true,
 		
 		log: {
 			/**
 			 * Enable logging?
 			 * Note that this is not recommended at production, as it may affect server performance
 			*/ 
-			enableLogging: true,
+			enableLogging: false,
 			
 			/**
 			 * Defines the type os messages to log

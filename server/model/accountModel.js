@@ -20,8 +20,8 @@ class Account {
         this.sex = sex;
         this.email = email;
         this.level = 0;
-        this.lastLoginTime = null;
-        this.lastLoginIp = null;
+        this.lastLoginTime = '';
+        this.lastLoginIp = '';
     }
 }
 
@@ -43,7 +43,7 @@ class AccountModel {
     static createAccount(userId, password, sex, email, callback) {
         var acc = new Account(userId, password, sex, email);
         
-        MongoDB.manager.getDatabase()
+        MongoDB.manager
             .getNextSequence(AccountSequence, function( err, seqValue ) {
                 if(err) {
                    Logger.error("AccountModel::Error while trying to generate account's sequence.");
@@ -89,4 +89,4 @@ function handleError( err ) {
 }
 
 //export
-module.exports = Account;
+module.exports = AccountModel;

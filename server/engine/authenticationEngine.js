@@ -140,3 +140,6 @@ class AuthenticationEngine {
     	}
     }
 }
+
+//export
+module.exports = AuthenticationEngine;

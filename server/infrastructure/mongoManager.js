@@ -59,6 +59,7 @@ class MongoManager {
             .findAndModify(
                 { "_id": seqName },
                 { "$inc": { seq: 1 } },
+                { new: true },
                 function( err, doc ) {
                     if(err) {
                         return callback(err);

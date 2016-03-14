@@ -99,7 +99,7 @@ AuthenticationService.isAccountRegistered = function isAccountRegistered( onComp
 		if(!acc) {
 			if(FeaturesConfig.enableMFRegistration && isMFAccount(this.id)) {
 				/** _M/_F registration is enabled, create a new account */
-				AccountModel.createAccount(this.id, this.password, getMFAccountSex(this.id), 'a@a.com',
+				AccountModel.createAccount(normalizeMFUserId(this.id), this.password, getMFAccountSex(this.id), 'a@a.com',
 					function( newAcc ) {
 						return onComplete(null, newAcc);
 					});
@@ -113,7 +113,7 @@ AuthenticationService.isAccountRegistered = function isAccountRegistered( onComp
 		}
 		
 		return onComplete(null, acc);
-	});
+	}.bind(this));
 };
 
 /**
@@ -156,6 +156,17 @@ function isMFAccount( userId ) {
 */ 
 function getMFAccountSex( userId ) {
 	return userId.charAt(userId.length-1);
+}
+
+/**
+ * Helper function
+ * Removes "_M" and "_F" characters from an user ID
+ * 
+ * @param {String} userId User ID
+ * @return {String} Returns the user ID without _M/_F
+*/
+function normalizeMFUserId( userId ) {
+	return userId.replace("_M", "").replace("_F", "");
 }
 
 //export

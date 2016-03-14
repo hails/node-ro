@@ -52,17 +52,19 @@ function onPacketReceived( data, socket ) {
 	var packetInstance = new packetInfo.struct(packetReader);
 
 	/** Call engine function to handle the packet */
-	return packetInfo.handler(packetInstance, onResponseReady);
+	packetInfo.handler(packetInstance, function(responsePkt) {
+		return onResponseReady(responsePkt, socket);
+	});
 };
 
 /**
  * Send response packet back to client
  * 
- * @this {Object} Client's socket
  * @param {Object} response Response packet
+ * @param {Object} socket Client's socket
 */
-function onResponseReady( responsePkt, keepAlive ) {
-	return this.write(responsePkt.toBuffer());
+function onResponseReady( responsePkt, socket ) {
+	return socket.write(responsePkt.toBuffer());
 }
 
 //export
