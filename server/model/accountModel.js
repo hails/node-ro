@@ -49,6 +49,8 @@ class AccountModel {
                    Logger.error("AccountModel::Error while trying to generate account's sequence.");
                    process.exit(1);
                 }
+
+                console.log("===seq", seqValue);
                 
                 acc._id = seqValue;
                 
@@ -57,7 +59,7 @@ class AccountModel {
                     .insert(acc, function( err, docs ) {
                        handleError(err);
                        
-                       return callback(docs || null);
+                       return callback(docs.ops[0] || null);
                     });
             });
     }

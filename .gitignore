@@ -1,4 +1,4 @@
-logs/
+logs/node-server.log
 node_modules/
 data/
 mongod

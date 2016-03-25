@@ -64,8 +64,10 @@ class MongoManager {
                     if(err) {
                         return callback(err);
                     }
+
+                    console.log(doc.value);
                     
-                    return callback(null, doc._id);
+                    return callback(null, doc.value.seq);
                 }
             );
     }

@@ -13,7 +13,7 @@ var FeaturesConfig = require('../configuration/features.js').features;
   * @author Alvaro Bezerra <https://github.com/alvarodms>
 */
 
-const LogsPath = path.join(__dirname, '../../logs', 'node-server.log');
+const LogsPath = path.join(__dirname, '../logs', 'node-server.log');
 const LogDateFormat = "YYYY-MM-DD HH:mm:ss";
 const LogTypes = {
 	ALL: 0,

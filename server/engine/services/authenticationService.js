@@ -95,24 +95,27 @@ AuthenticationService.isAccountRegistered = function isAccountRegistered( onComp
 		});
 	}
 	
-	AccountModel.findByUserId(this.id, function( acc ) {
+	AccountModel.findByUserId(normalizeMFUserId(this.id), function( acc ) {
 		if(!acc) {
 			if(FeaturesConfig.enableMFRegistration && isMFAccount(this.id)) {
 				/** _M/_F registration is enabled, create a new account */
 				AccountModel.createAccount(normalizeMFUserId(this.id), this.password, getMFAccountSex(this.id), 'a@a.com',
 					function( newAcc ) {
+						console.log("====newacc", newAcc);
 						return onComplete(null, newAcc);
 					});
 			}
 			else {
-				/** Account not found */
+				/** User ID not registered */
 				return onComplete({
 					code: LOGIN_ERROR.UnregisteredId
 				});	
 			}
 		}
-		
-		return onComplete(null, acc);
+		else {
+			/** Account found! */
+			return onComplete(null, acc);
+		}
 	}.bind(this));
 };
 
@@ -124,6 +127,7 @@ AuthenticationService.isAccountRegistered = function isAccountRegistered( onComp
  * @param {function} onComplete Function called when the method is complete
  */
 AuthenticationService.isUserAndPasswordValid = function isUserAndPasswordValid( userAccount, onComplete ) {
+	console.log("thissss", this);
 	if(!userAccount || userAccount.password !== this.password) {
 		return onComplete({
 			code: LOGIN_ERROR.IncorrectPassword
