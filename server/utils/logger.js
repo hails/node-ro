@@ -22,74 +22,7 @@ const LogTypes = {
 	ERROR: 3
 }
 
-var Logger = {};
-
-//erase log content on initialization
-fs.writeFile(LogsPath, "");
-
-/** INFO logger */
-if(FeaturesConfig.log.enableLogging && (FeaturesConfig.log.logLevel === LogTypes.INFO || FeaturesConfig.log.logLevel === LogTypes.ALL)) {
-	Logger.info = function( msg ) {
-		console.log("[ I ] " + msg);
-		fs.appendFile(LogsPath, moment().format(LogDateFormat) + " [ I ] " + msg + "\n");
-		return;
-	};
-}
-else {
-	//Logging not enabled, just outputs to console.log
-	Logger.info = function( msg ) {
-		console.log("[ I ] " + msg);
-		return;
-	};	
-}
-
-/** WARNING logger */
-if(FeaturesConfig.log.enableLogging && (FeaturesConfig.log.logLevel === LogTypes.WARNING || FeaturesConfig.log.logLevel === LogTypes.ALL)) {
-	Logger.warn = function( msg ) {
-		console.log("[ W ] " + msg.toString().yellow);
-		fs.appendFile(LogsPath, moment().format(LogDateFormat) + " [ W ] " + msg + "\n");
-		return;
-	};
-}
-else {
-	//Logging not enabled, just outputs to console.log
-	Logger.warn = function( msg ) {
-		console.log("[ W ] " + msg.toString().yellow);
-		return;
-	};	
-}
-
-/** ERROR logger */
-if(FeaturesConfig.log.enableLogging && (FeaturesConfig.log.logLevel === LogTypes.ERROR || FeaturesConfig.log.logLevel === LogTypes.ALL)) {
-	Logger.error = function( msg ) {
-		console.log("[ E ] " + msg.toString().red);
-		fs.appendFile(LogsPath, moment().format(LogDateFormat) + " [ E ] " + msg + "\n");
-		return;
-	};
-}
-else {
-	//Logging not enabled, just outputs to console.log
-	Logger.error = function( msg ) {
-		console.log("[ E ] " + msg.toString().red);
-		return;
-	};	
-}
-
-/** Success messages logger */
-if(FeaturesConfig.log.enableLogging && (FeaturesConfig.log.logLevel === LogTypes.INFO || FeaturesConfig.log.logLevel === LogTypes.ALL)) {
-	Logger.success = function( msg ) {
-		console.log("[ I ] ".green + msg.toString().green);
-		fs.appendFile(LogsPath, moment().format(LogDateFormat) + " [ I ] " + msg + "\n");
-		return;
-	};
-}
-else {
-	//Logging not enabled, just outputs to console.log
-	Logger.success = function( msg ) {
-		console.log("[ I ] ".green + msg.toString().green);
-		return;
-	};	
-}
+var Logger = console
 
 //export
 module.exports = Logger;

@@ -22,32 +22,32 @@ var client = null;
 
 /** Redis manager class */
 class RedisManager {
-    /** 
+    /**
      * Creates a connection to Redis server
-     * 
+     *
      * @param	{function}	onRedisReady    Function called when a connection to Redis server is succesfully established
      */
     static init( onRedisReady ) {
         Logger.info("Connecting to Redis server...");
-        
+
         client = Redis.createClient({ host: DBConfig.redisAddress, port: DBConfig.redisPort });
-        
+
         client.on('connect', function() {
-            Logger.success("Successfully connected to Redis server!");
+            Logger.log("Successfully connected to Redis server!");
             return onRedisReady();
         });
-        
+
         client.on('error', function() {
             Logger.error("RedisManager::Error while trying to connect to Redis server. See logs for more details.");
             return process.exit(1);
         });
     }
-    
-    /** 
+
+    /**
      * Returns a Redis client object
-     * 
-     * @returns {Object} 
-     */    
+     *
+     * @returns {Object}
+     */
     static getClient() {
         return client;
     }
@@ -56,6 +56,3 @@ class RedisManager {
 //export
 exports.databases = databases;
 exports.manager = RedisManager;
-
-
-

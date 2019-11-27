@@ -17,43 +17,43 @@ var _db = null;
 
 /** MongoDB manager class */
 class MongoManager {
-    /** 
+    /**
      * Creates a connection to MongoDB server
-     * 
+     *
      * @param	{function}	onMongoReady    Function called when a connection to MongoDB is succesfully established
      */
     static init( onMongoReady ) {
         Logger.info("Connecting to MongoDB...");
-        
+
         MongoDB.MongoClient.connect(DBConfig.connectionUrl, function( err, db ) {
         	if(err) {
 	            Logger.error("MongoManager::Error while trying to connect to MongoDB. See logs for more details.");
-	            return process.exit(1);        		
+	            return process.exit(1);
         	}
-        	
+
         	_db = db;
-            Logger.success("Successfully connected to MongoDB!");
-            
-            return onMongoReady();	
+            Logger.log("Successfully connected to MongoDB!");
+
+            return onMongoReady();
         });
     }
-    
-    /** 
+
+    /**
      * Returns a MongoDB database object
-     * 
-     * @returns {Object} 
-     */    
+     *
+     * @returns {Object}
+     */
     static getDatabase() {
         return _db;
     }
-    
+
     /**
      * Updates a sequence and returns its new value
-     * 
+     *
      * @param {String} seqName The name of the sequence
      * @param {function} callback Callback function
      * @returns {Number} Sequence's new value
-    */ 
+    */
     static getNextSequence( seqName, callback ) {
         _db.collection('counters')
             .findAndModify(
@@ -66,7 +66,7 @@ class MongoManager {
                     }
 
                     console.log(doc.value);
-                    
+
                     return callback(null, doc.value.seq);
                 }
             );

@@ -12,7 +12,7 @@ module.exports = {
 		/**
 		  * Server IP Address
 		*/
-		ipAddress: '127.0.0.1',
+		ipAddress: '0.0.0.0',
 
 		/**
 		  * Server Port

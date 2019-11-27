@@ -13,6 +13,9 @@ var printf = require('../utils/sprintf.js');
 
 var PacketHandler = function( socket ) {
 	socket.on('data', function( data ) {
+		console.log('Packet length: ', data.length)
+
+
 		onPacketReceived(data, socket);
 	});
 };
@@ -20,7 +23,7 @@ var PacketHandler = function( socket ) {
 /**
  * Receives a packet and validate its size and structure.
  * If everything is ok, call the corresponding engine function
- * 
+ *
  * @param {Object} data A buffer object
  * @param {Object} socket Client's socket
 */
@@ -35,7 +38,7 @@ function onPacketReceived( data, socket ) {
 
 	/** Gets packet data by its id/type */
 	var packetInfo = PacketDB[packetId];
-	
+
 	/** Check if packet is in database */
 	if(!packetInfo) {
 		Logger.warn(printf("PacketHandler::Unknown packet %s received. Ignoring...", "0x"+packetId.toString(16)));
@@ -59,7 +62,7 @@ function onPacketReceived( data, socket ) {
 
 /**
  * Send response packet back to client
- * 
+ *
  * @param {Object} response Response packet
  * @param {Object} socket Client's socket
 */

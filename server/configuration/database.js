@@ -1,10 +1,10 @@
 var config = {
 	/** MongoDB connection URL */
-	connectionUrl: 'mongodb://localhost:27017/node-emulator',
-	
+	connectionUrl: 'mongodb://mongo/node-emulator',
+
 	/** Redis server address */
-	redisAddress: '127.0.0.1',
-	
+	redisAddress: 'redis',
+
 	/** Redis server port */
 	redisPort: 6379
 };

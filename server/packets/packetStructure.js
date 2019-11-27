@@ -89,7 +89,7 @@ PACKET.OUT.ACCEPT_LOGIN.prototype.toBuffer = function toBuffer() {
 		offset = buf.writeUInt16LE(this.serverList[i].state, offset);
 		offset = buf.writeUInt16LE(this.serverList[i].property, offset);
 	}
-	
+
 	return buf;
 };
 
@@ -125,12 +125,12 @@ PACKET.OUT.ACCEPT_ENTER_NEO_UNION_HEADER = function ACCEPT_ENTER_NEO_UNION_HEADE
 	this.premiumEndSlot = 0;
 	this.dummy1_beginBilling = 0;
 	this.code = 0;
-	this.charInfo = [];	
+	this.charInfo = [];
 };
 PACKET.OUT.ACCEPT_ENTER_NEO_UNION_HEADER.prototype.toBuffer = function toBuffer() {
 	var buf 	= new Buffer(29).fill(0),
 		offset	= 0;
-		
+
 	offset = buf.writeUInt16LE(0x82d, offset); //packet type/id
 	offset = buf.writeUInt16LE(29, offset); //packet size
 	offset = buf.writeUInt8(1, offset); //available slots??
@@ -139,7 +139,7 @@ PACKET.OUT.ACCEPT_ENTER_NEO_UNION_HEADER.prototype.toBuffer = function toBuffer(
 	offset = buf.writeUInt8(1, offset); //?????
 	offset = buf.writeUInt8(1, offset); //?????
 	offset = buf.write('', offset, 20); //unused bytes
-	
+
 	return buf;
 };
 
@@ -176,10 +176,10 @@ PACKET.OUT.REFUSE_ENTER = function REFUSE_ENTER() {
 PACKET.OUT.REFUSE_ENTER.prototype.toBuffer = function toBuffer() {
 	var buf		= new Buffer(3).fill(0),
 		offset  = 0;
-		
+
 	offset = buf.writeUInt16LE(0x6c, offset); //packet type/id
 	offset = buf.writeUInt8(this.errorCode, offset);
-	
+
 	return buf;
 };
 
@@ -191,25 +191,25 @@ PACKET.PING.size = 6;
 PACKET.PING.prototype.toBuffer = function toBuffer() {
 	var buf 	= new Buffer(6).fill(0),
 		offset  = 0;
-	
+
 	offset = buf.writeUInt16LE(0x187, offset); //packet type/id
 	offset = buf.writeUInt32LE(this.aid, offset);
-	
+
 	return buf;
 };
 
 /**
  * Packets used to encapsulate single values
  * that are sent to the client
-*/ 
+*/
 PACKET.OUT.UINT32_RESPONSE = function UINT32_RESPONSE() {
-	this.value = 0;	
+	this.value = 0;
 };
 PACKET.OUT.UINT32_RESPONSE.prototype.toBuffer = function toBuffer() {
 	var buf = new Buffer(4).fill(0);
-	
+
 	buf.writeUInt32LE(this.value);
-	
+
 	return buf;
 };
 

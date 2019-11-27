@@ -1,0 +1,18 @@
+version: '3'
+services:
+  mongo:
+    image: mongo
+
+  redis:
+    image: redis
+
+  server:
+    build: .
+    volumes:
+      - .:/nodero
+      - /nodero/node_modules
+    ports:
+      - 6900:6900
+    links:
+    - mongo
+    - redis

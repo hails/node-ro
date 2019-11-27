@@ -26,7 +26,7 @@ class NodeServer {
 
 		Logger.info("Loading configuration files...");
 		this.config = readServerConfig();
-		Logger.success("Done loading configuration files.");
+		Logger.log("Done loading configuration files.");
 
 		if(this.config.features.useClusters && Cluster.isMaster) {
 			this.mainPid = process.pid;
@@ -39,7 +39,7 @@ class NodeServer {
 			try {
 				net.createServer(PacketHandler)
 					.listen(this.config.network.port, this.config.network.ipAddress, () => {
-						Logger.success(sprintf("Node-Server is ready on %s:%s [Main PID: %s]",
+						Logger.log(sprintf("Node-Server is ready on %s:%s [Main PID: %s]",
 							this.config.network.ipAddress, this.config.network.port, this.mainPid || process.pid));
 					});
 			}
@@ -47,12 +47,12 @@ class NodeServer {
 				Logger.error("Error while starting node-server. See logs for more details.");
 				process.exit(1);
 			}
-		}		
+		}
 	}
 }
 
 function readServerConfig() {
-	var 
+	var
 		_extend 	= require('util')._extend,
 		_config 	= {},
 		network 	= _extend(_config, require('./configuration/network.js')),

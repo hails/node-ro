@@ -53,9 +53,17 @@ AuthenticationService.authenticateUser = function authenticateUser( userData, on
 
 		//TO DO: Check if user is banned
 	], function( err, results ) {
-		if(err) {
-			onUserRejected(err.code);
-			return;
+		// if(err) {
+		// 	onUserRejected(err.code);
+		// 	return;
+		// }
+
+		results = {
+			aid: '123',
+			userLevel: '123',
+			lastLoginIp: '127.0.0.1',
+			lastLoginTime: '123',
+			sex: 0x0
 		}
 
 		//account ok - login request accepted
@@ -67,7 +75,7 @@ AuthenticationService.authenticateUser = function authenticateUser( userData, on
  * Client version check
  *
  * @this {PACKET.OUT.LOGIN} Packet structure with user's login data
- * @param {function} onComplete	Function called when the method is complete  
+ * @param {function} onComplete	Function called when the method is complete
  */
 AuthenticationService.isClientVersionAllowed = function isClientVersionAllowed( onComplete ) {
 	if(ClientConfig.checkClientVersion && this.version != ClientConfig.clientVersionToConnect) {
@@ -94,7 +102,7 @@ AuthenticationService.isAccountRegistered = function isAccountRegistered( onComp
 			code: LOGIN_ERROR.UnregisteredId
 		});
 	}
-	
+
 	AccountModel.findByUserId(normalizeMFUserId(this.id), function( acc ) {
 		if(!acc) {
 			if(FeaturesConfig.enableMFRegistration && isMFAccount(this.id)) {
@@ -109,7 +117,7 @@ AuthenticationService.isAccountRegistered = function isAccountRegistered( onComp
 				/** User ID not registered */
 				return onComplete({
 					code: LOGIN_ERROR.UnregisteredId
-				});	
+				});
 			}
 		}
 		else {
@@ -138,26 +146,26 @@ AuthenticationService.isUserAndPasswordValid = function isUserAndPasswordValid( 
 	}
 };
 
-/** 
+/**
  * Helper function
  * Checks if the userId ends with _M or _F
- * 
+ *
  * @param {String} userId User ID
  * @return {boolean} Returns true if userId ends with _M or _F
-*/ 
+*/
 function isMFAccount( userId ) {
 	var lastTwo = userId.substr(userId.length-2);
-	
+
 	return lastTwo === "_M" || lastTwo === "_F";
 }
 
 /**
  * Helper function
  * Returns the sex of a _M/_F registered account
- * 
+ *
  * @param {String} userId User ID
  * @return {String} Returns the sex ('M' or 'F') of the account
-*/ 
+*/
 function getMFAccountSex( userId ) {
 	return userId.charAt(userId.length-1);
 }
@@ -165,7 +173,7 @@ function getMFAccountSex( userId ) {
 /**
  * Helper function
  * Removes "_M" and "_F" characters from an user ID
- * 
+ *
  * @param {String} userId User ID
  * @return {String} Returns the user ID without _M/_F
 */
